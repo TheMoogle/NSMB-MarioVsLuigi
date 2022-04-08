@@ -43,17 +43,6 @@ public class DiscordIntegration : MonoBehaviour //This is probably going to be h
 				}
             }
 		};
-		activityManager.ClearActivity((result) =>
-		{
-			if (result == Discord.Result.Ok)
-			{
-				Debug.Log("Success!");
-			}
-			else
-			{
-				Debug.Log("Failed");
-			}
-		});
 		activityManager.UpdateActivity(activity, (res) =>
 		{
 			if (res == Discord.Result.Ok)
