@@ -11,6 +11,7 @@ public class DiscordIntegration : MonoBehaviour //This is probably going to be h
 {
 
 	public Discord.Discord discord;
+	public Discord.Activity activity;
 	public string LevelName; 
 	long currenttime = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
 	long endingtime = 0;
@@ -21,27 +22,14 @@ public class DiscordIntegration : MonoBehaviour //This is probably going to be h
 		discord = new Discord.Discord(961314848145285161, (System.UInt64)Discord.CreateFlags.Default);
 		var activityManager = discord.GetActivityManager();
 		print(SceneManager.GetActiveScene().buildIndex);
-		endingtime = currenttime + (int)PhotonNetwork.CurrentRoom.CustomProperties[Enums.NetRoomProperties.Time] + 7; //TODO: Make this time start when the scene is fully loaded, the extra 7 seconds is a very temporary workaround
-		var activity = new Discord.Activity
-			{
-			Details = "Playing on the " + LevelName + " map",
-			State = "Players:",
+		activity = new Discord.Activity
+		{
+			Details = "On The Main Menu",
 			Assets =
 			{
-			LargeImage = "title"
+				LargeImage = "title"
 			},
-			Timestamps =
-			{
-			End = endingtime
-			},
-			Party =
-            {
-				Size =
-                {
-					MaxSize = 10, //TODO: Make this accurate to the maximum lobby size
-					CurrentSize = PhotonNetwork.CurrentRoom.PlayerCount
-				}
-            }
+			Instance = false,
 		};
 		activityManager.UpdateActivity(activity, (res) =>
 		{
@@ -62,4 +50,10 @@ public class DiscordIntegration : MonoBehaviour //This is probably going to be h
 		discord.RunCallbacks();
 		//TODO: Clear status when exiting game
 	}
+
+    private void OnDestroy()
+    {
+        discord.Dispose();
+    }
+
 }
